@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<!-- On remplace entièrement le head par votre fragment layoutHead -->
+<head th:replace="~{fragments/layout :: layoutHead('Liste des utilisateurs')}"></head>
+
+<!-- On remplace le body par votre fragment layoutBody, en y injectant navbar + content -->
+<body th:replace="~{fragments/layout :: layoutBody(
+                       ~{fragments/navbar :: navbar},
+                       ~{::content}
+                     )}">
+
+<!-- contenu spécifique à cette page -->
+<div th:fragment="content">
+
+  <h1>Liste des utilisateurs</h1>
+
+  <p>
+    <a th:href="@{/admin/users/nouveau}"
+       class="btn btn-primary mb-3">
+      Créer un nouvel utilisateur
+    </a>
+  </p>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody th:each="u : ${users}">
+    <tr>
+      <td th:text="${u.id}">1</td>
+      <td th:text="${u.nom}">Dupont</td>
+      <td th:text="${u.prenom}">Marie</td>
+      <td th:text="${u.email}">marie.dupont@example.com</td>
+      <td>
+        <a th:href="@{'/admin/users/' + ${u.id} + '/modifier'}"
+           class="btn btn-sm btn-outline-secondary">
+          Modifier
+        </a>
+        <form th:action="@{'/admin/users/' + ${u.id} + '/supprimer'}"
+              method="post"
+              style="display:inline"
+              onsubmit="return confirm('Supprimer cet utilisateur ?');">
+          <button type="submit" class="btn btn-sm btn-outline-danger">
+            Supprimer
+          </button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

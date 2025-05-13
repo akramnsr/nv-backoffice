@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Liste des résultats</title>
+</head>
+<body>
+<h1>Résultats</h1>
+
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Score</th>
+    <th>Date de passage</th>
+    <th>Statut</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="r : ${resultats}">
+    <td th:text="${r.id}">1</td>
+    <td th:text="${r.score}">12.5</td>
+    <td th:text="${#dates.format(r.datePassage, 'yyyy-MM-dd HH:mm')}">2025-05-01 14:30</td>
+    <td th:text="${r.statut}">Réussi</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

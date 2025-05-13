@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<!-- head injecté depuis fragments/layout -->
+<head th:replace="~{fragments/layout :: layoutHead('Liste des résultats')}">
+</head>
+
+<!-- body injecté avec navbar + zone de contenu -->
+<body th:replace="~{fragments/layout :: layoutBody(
+                        ~{fragments/navbar :: navbar},
+                        ~{::content}
+                     )}">
+
+<!-- tout ce qui suit est votre contenu spécifique -->
+<div th:fragment="content">
+
+  <h1>Résultats</h1>
+
+  <p>
+    <a th:href="@{/admin/resultats/nouveau}"
+       class="btn btn-primary mb-3">
+      Nouveau résultat
+    </a>
+  </p>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Score</th>
+      <th>Date de passage</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r : ${resultats}">
+      <td th:text="${r.id}">1</td>
+      <td th:text="${r.score}">0</td>
+      <td th:text="${#dates.format(r.datePassage, 'yyyy-MM-dd HH:mm')}">
+        2025-01-01 12:00
+      </td>
+      <td th:text="${r.statut}">Statut</td>
+      <td>
+        <a th:href="@{/admin/resultats/{id}/modifier(id=${r.id})}"
+           class="btn btn-sm btn-outline-secondary">
+          Éditer
+        </a>
+        &nbsp;
+        <form th:action="@{/admin/resultats/{id}/supprimer(id=${r.id})}"
+              method="post"
+              style="display:inline"
+              th:onsubmit="|return confirm('Supprimer le résultat #'+${r.id}+' ?');|">
+          <button type="submit" class="btn btn-sm btn-outline-danger">
+            Supprimer
+          </button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- 1) On remplace le head via le fragment layoutHead(...) -->
+<head th:replace="fragments/layout :: layoutHead('Liste des formations')" />
+
+<!-- 2) On remplace entièrement le body via le fragment layoutBody(navbar, content) -->
+<body th:replace="fragments/layout :: layoutBody(
+                       ~{fragments/navbar :: navbar},
+                       ~{::content}
+                     )">
+
+<!-- 3) On définit ici le fragment content qui sera injecté dans layoutBody -->
+<div th:fragment="content" class="container mt-4">
+    <h1>Formations</h1>
+    <p>
+        <a class="btn btn-primary mb-3"
+           th:href="@{/admin/formations/nouveau}">
+            Nouvelle formation
+        </a>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Durée (h)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${formations}">
+            <td th:text="${f.id}">1</td>
+            <td th:text="${f.titre}">Titre</td>
+            <td th:text="${f.description}">Description</td>
+            <td th:text="${f.dureeHeures}">0</td>
+            <td>
+                <a th:href="@{/admin/formations/{id}/modifier(id=${f.id})}"
+                   class="btn btn-sm btn-outline-secondary">
+                    Modifier
+                </a>
+                <form th:action="@{/admin/formations/{id}/supprimer(id=${f.id})}"
+                      method="post" style="display:inline"
+                      onsubmit="return confirm('Supprimer « [[${f.titre}]] » ?');">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-danger">
+                        Supprimer
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des Utilisateurs</title>
+</head>
+<body>
+<h1>Utilisateurs</h1>
+<ul>
+  <li th:each="u : ${user}">
+    <!-- affichez ici le nom/prénom/email, pas ‘titre’ -->
+    <span th:text="${u.nom} + ' ' + ${u.prenom}">Nom Prénom</span>
+   </form>
+  </li>
+</ul>
+</body>
+</html>

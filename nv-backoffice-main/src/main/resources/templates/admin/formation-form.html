@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<!-- 1) Le <head> est entièrement remplacé par votre fragment layoutHead(title) -->
+<head th:replace="
+      fragments/layout :: layoutHead(
+        ${formation.id} != null
+          ? 'Modifier Formation'
+          : 'Créer Formation'
+      )
+  " />
+
+<!-- 2) Le <body> est entièrement remplacé par votre fragment layoutBody(navbar, content) -->
+<body th:replace="
+      fragments/layout :: layoutBody(
+        ~{fragments/navbar :: navbar},
+        ~{::content}
+      )
+  ">
+
+<!-- 3) Ici, vous ne conservez que votre fragment content -->
+<div th:fragment="content" class="container mt-4">
+
+    <h1 th:text="${formation.id} != null ? 'Modifier Formation' : 'Créer Formation'"></h1>
+
+    <form th:action="@{/admin/formations}"
+          th:object="${formation}"
+          method="post">
+        <input type="hidden"
+               th:if="${formation.id} != null"
+               th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="titre" class="form-label">Titre :</label>
+            <input id="titre"
+                   type="text"
+                   th:field="*{titre}"
+                   class="form-control"
+                   required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description :</label>
+            <textarea id="description"
+                      th:field="*{description}"
+                      class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="dureeHeures" class="form-label">Durée (heures) :</label>
+            <input id="dureeHeures"
+                   type="number"
+                   th:field="*{dureeHeures}"
+                   class="form-control"
+                   min="1"
+                   required/>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                th:text="${formation.id} != null ? 'Mettre à jour' : 'Créer'">
+            Valider
+        </button>
+    </form>
+
+    <p class="mt-3">
+        <a th:href="@{/admin/formations}" class="btn btn-secondary">
+            Retour à la liste
+        </a>
+    </p>
+
+</div>
+</body>
+</html>

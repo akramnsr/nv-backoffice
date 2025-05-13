@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<!-- Remplace tout le <head> par votre fragment layoutHead, en passant le titre -->
+<head th:replace="~{fragments/layout :: layoutHead('Tableau de bord Admin')}"></head>
+
+<!-- Remplace le <body> par layoutBody, en injectant la navbar et le contenu -->
+<body th:replace="~{fragments/layout :: layoutBody(
+                        ~{fragments/navbar :: navbar},
+                        ~{::content}
+                      )}">
+
+<!-- Votre contenu doit se trouver dans un fragment “content” -->
+<div th:fragment="content" class="container">
+    <h1>Tableau de bord</h1>
+
+    <div class="dashboard-cards">
+        <div class="dashboard-card">
+            <div class="card-title">Formations</div>
+            <div class="card-value" th:text="${formationCount}">0</div>
+        </div>
+        <div class="dashboard-card">
+            <div class="card-title">Quiz</div>
+            <div class="card-value" th:text="${quizCount}">0</div>
+        </div>
+        <div class="dashboard-card">
+            <div class="card-title">Utilisateurs</div>
+            <div class="card-value" th:text="${userCount}">0</div>
+        </div>
+        <div class="dashboard-card">
+            <div class="card-title">Rapports</div>
+            <div class="card-value" th:text="${rapportCount}">0</div>
+        </div>
+        <div class="dashboard-card">
+            <div class="card-title">Résultats</div>
+            <div class="card-value" th:text="${resultatCount}">0</div>
+        </div>
+    </div>
+
+    <div class="recent-section">
+        <div class="recent-list">
+            <h2>Dernières formations</h2>
+            <ul>
+                <li th:each="f : ${recentFormations}">
+                    <a th:href="@{/admin/formations/edit/{id}(id=${f.id})}"
+                       th:text="${f.titre}">Formation</a>
+                </li>
+            </ul>
+        </div>
+        <div class="recent-list">
+            <h2>Derniers quiz</h2>
+            <ul>
+                <li th:each="q : ${recentQuizzes}">
+                    <a th:href="@{/admin/quizzes/{id}(id=${q.id})}"
+                       th:text="${q.titre}">Quiz</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

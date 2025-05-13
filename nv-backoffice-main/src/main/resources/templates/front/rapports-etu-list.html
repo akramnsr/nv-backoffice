@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Liste des rapports</title>
+</head>
+<body>
+<h1>Rapports étudiants</h1>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th><th>Contenu</th><th>Date</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="r : ${rapports}">
+    <td th:text="${r.id}">1</td>
+    <td th:text="${r.contenu}">…</td>
+    <td th:text="${#dates.format(r.dateSoumission, 'yyyy-MM-dd HH:mm')}">…</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

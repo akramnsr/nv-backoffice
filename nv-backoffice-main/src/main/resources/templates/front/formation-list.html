@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Formations</title>
+</head>
+<body th:inline="javascript">
+<h1>Formations</h1>
+<ul>
+    <li th:each="f : ${formations}">
+        <span th:text="${f.titre}">Titre</span>
+    </li>
+</ul>
+</body>
+</html>
