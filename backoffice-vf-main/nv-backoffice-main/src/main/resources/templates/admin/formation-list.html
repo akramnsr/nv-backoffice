@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head th:replace="~{fragments/layout :: layoutHead('Liste des formations')}"></head>
+<body th:replace="~{fragments/layout :: layoutBody(
+         ~{fragments/navbar :: navbar},
+         ~{::content}
+       )}">
+<div th:fragment="content" class="container mt-4">
+    <h1>Formations</h1>
+    <p>
+        <a class="btn btn-primary mb-3" th:href="@{/admin/formations/nouveau}">
+            Nouvelle formation
+        </a>
+    </p>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Durée (h)</th>
+            <th>Nb. de quiz</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${formations}"
+            th:onclick="|window.location='@{/admin/formations/{id}(id=${f.id})}'|"
+            style="cursor:pointer">
+            <td th:text="${f.id}">1</td>
+            <td th:text="${f.titre}">Titre</td>
+            <td th:text="${f.description}">Desc</td>
+            <td th:text="${f.dureeHeures}">0</td>
+            <td th:text="${f.nombreQuiz}">0</td>
+            <td>
+                <a th:href="@{/admin/formations/{id}/modifier(id=${f.id})}"
+                   class="btn btn-sm btn-outline-secondary">Modifier</a>
+                <form th:action="@{/admin/formations/{id}/supprimer(id=${f.id})}"
+                      method="post" style="display:inline"
+                      onsubmit="return confirm('Supprimer « [[${f.titre}]] » ?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        Supprimer
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <nav th:if="${totalPages} > 1" aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{|/admin/formations?page=${currentPage - 1}&size=${param.size}|}">Précédent</a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">Page [[${currentPage + 1}]] / [[${totalPages}]]</span>
+            </li>
+            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{|/admin/formations?page=${currentPage + 1}&size=${param.size}|}">Suivant</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

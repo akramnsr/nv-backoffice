@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<head th:replace="
+      fragments/layout :: layoutHead(
+        ${quiz.id} != null ? 'Modifier Quiz' : 'Créer Quiz'
+      )
+  " />
+
+<body th:replace="
+      fragments/layout :: layoutBody(
+        ~{fragments/navbar :: navbar},
+        ~{::content}
+      )
+  ">
+
+<div th:fragment="content" class="container mt-4">
+
+    <h1 th:text="${quiz.id} != null ? 'Modifier Quiz' : 'Créer Quiz'"></h1>
+
+    <form th:object="${quiz}"
+          th:action="${quiz.id} != null
+                          ? @{/admin/quiz/{id}(id=${quiz.id})}
+                          : @{/admin/quiz}"
+          method="post">
+        <input type="hidden" th:if="${quiz.id} != null" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="titre" class="form-label">Titre :</label>
+            <input id="titre"
+                   type="text"
+                   th:field="*{titre}"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description :</label>
+            <textarea id="description"
+                      th:field="*{description}"
+                      class="form-control"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="nbQuestions" class="form-label">Nombre de questions :</label>
+            <input id="nbQuestions"
+                   type="number"
+                   th:field="*{nbQuestions}"
+                   class="form-control"
+                   min="1"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="duree" class="form-label">Durée (min) :</label>
+            <input id="duree"
+                   type="number"
+                   th:field="*{duree}"
+                   class="form-control"
+                   min="1"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="dateInscription" class="form-label">Date :</label>
+            <input id="dateInscription"
+                   type="date"
+                   th:field="*{dateInscription}"
+                   class="form-control"
+                   required />
+        </div>
+
+        <!-- Nouveau champ: sélection de la formation -->
+        <div class="mb-3">
+            <label for="formation" class="form-label">Formation :</label>
+            <select id="formation"
+                    name="formationId"
+                    class="form-select"
+                    required>
+                <option th:each="f : ${formations}"
+                        th:value="${f.id}"
+                        th:text="${f.titre}"
+                        th:selected="${quiz.formation != null} ? ${f.id} == ${quiz.formation.id} : false">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                th:text="${quiz.id} != null ? 'Mettre à jour' : 'Créer'">
+            Valider
+        </button>
+    </form>
+
+    <p class="mt-3">
+        <a th:href="@{/admin/quiz}" class="btn btn-secondary">
+            Retour à la liste
+        </a>
+    </p>
+
+</div>
+</body>
+</html>

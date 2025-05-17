@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head th:replace="~{fragments/layout :: layoutHead('Détail Formation')}"></head>
+<body th:replace="~{fragments/layout :: layoutBody(
+         ~{fragments/navbar :: navbar},
+         ~{::content}
+       )}">
+
+<div th:fragment="content" class="container mt-4">
+    <h1>Détail de la formation</h1>
+
+    <div class="card mb-4">
+        <div class="row g-0">
+            <div class="col-md-4" th:if="${formation.imageUrl}">
+                <img th:src="@{/uploads/{img}(img=${formation.imageUrl})}"
+                     class="img-fluid rounded-start" alt="Image de la formation"/>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h2 th:text="${formation.titre}">Titre</h2>
+                    <p th:text="${formation.description}">Description</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Durée :</strong>
+                            <span th:text="${formation.dureeHeures} + ' h'">0 h</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Nombre de quiz :</strong>
+                            <span th:text="${formation.nombreQuiz}">0</span>
+                        </li>
+                    </ul>
+                    <a th:href="@{/admin/formations/{id}/modifier(id=${formation.id})}"
+                       class="btn btn-outline-secondary mt-3">
+                        Modifier la formation
+                    </a>
+                    <a th:href="@{/admin/formations}" class="btn btn-secondary mt-3 ms-2">
+                        Retour à la liste
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Quizzes associés</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Nb. de questions</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="q : ${quizzes}">
+            <td th:text="${q.id}">1</td>
+            <td th:text="${q.titre}">Quiz titre</td>
+            <td th:text="${q.nbQuestions}">0</td>
+            <td>
+                <a th:href="@{/admin/quiz/{id}/modifier(id=${q.id})}"
+                   class="btn btn-sm btn-outline-secondary">Modifier</a>
+                <a th:href="@{/admin/quiz/{id}/supprimer(id=${q.id})}"
+                   class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Supprimer ce quiz ?');">
+                    Supprimer
+                </a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(quizzes)}">
+            <td colspan="4" class="text-center">Aucun quiz associé</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

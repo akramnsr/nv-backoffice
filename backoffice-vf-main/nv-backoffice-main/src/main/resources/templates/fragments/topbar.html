@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="topbar" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+        <!-- Bouton hamburger pour mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Titre / Logo -->
+        <a class="navbar-brand ms-3" href="#" th:href="@{/admin/dashboard}">
+            <strong>MonBackOffice</strong>
+        </a>
+        <!-- Espace droit : recherche, notifications, profil -->
+        <div class="d-flex ms-auto">
+            <form class="d-flex me-3">
+                <input class="form-control" type="search" placeholder="Rechercher..." aria-label="Search">
+                <button class="btn btn-outline-secondary ms-1" type="submit">
+                    <i class="bi bi-search"></i>
+                </button>
+            </form>
+            <a class="nav-link position-relative me-3" href="#">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            3
+          </span>
+            </a>
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" id="userMenu"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i> Admin
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                    <li><a class="dropdown-item" href="#">Profil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" th:href="@{/admin/logout}">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

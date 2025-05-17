@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<!-- head injecté depuis fragments/layout -->
+<head th:replace="~{fragments/layout :: layoutHead('Liste des rôles')}"></head>
+
+<!-- body injecté avec navbar + zone de contenu -->
+<body th:replace="~{fragments/layout :: layoutBody(
+                       ~{fragments/navbar :: navbar},
+                       ~{::content}
+                     )}">
+
+<div th:fragment="content">
+
+    <h1>Liste des rôles</h1>
+
+    <p>
+        <a th:href="@{/admin/roles/nouveau}"
+           class="btn btn-primary mb-3">
+            Créer un rôle
+        </a>
+    </p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="role : ${roles}">
+            <td th:text="${role.id}">1</td>
+            <td th:text="${role.nom}">ROLE_USER</td>
+            <td th:text="${role.description}">Utilisateur standard</td>
+            <td>
+                <a th:href="@{/admin/roles/{id}/modifier(id=${role.id})}"
+                   class="btn btn-sm btn-outline-secondary">
+                    Modifier
+                </a>
+                <form th:action="@{/admin/roles/{id}/supprimer(id=${role.id})}"
+                      method="post"
+                      style="display:inline">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('Voulez-vous vraiment supprimer ce rôle ?');">
+                        Supprimer
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

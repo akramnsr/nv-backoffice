@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- head injecté depuis fragments/layout -->
+<head th:replace="
+    ~{fragments/layout :: layoutHead(
+      ${user.id} == null ? 'Créer Utilisateur' : 'Modifier Utilisateur'
+    )}
+  "></head>
+
+<!-- body injecté avec navbar + zone de contenu -->
+<body th:replace="
+    ~{fragments/layout :: layoutBody(
+      ~{fragments/navbar :: navbar},
+      ~{::content}
+    )}
+  ">
+
+<div th:fragment="content" class="container mt-4">
+
+    <h1 th:text="${user.id} == null ? 'Créer Utilisateur' : 'Modifier Utilisateur'"></h1>
+
+    <form th:object="${user}"
+          th:action="${user.id} == null
+                         ? @{/admin/users}
+                         : @{/admin/users/{id}(id=${user.id})}"
+          method="post">
+
+        <!-- id caché pour l'update -->
+        <input type="hidden"
+               th:if="${user.id != null}"
+               th:field="*{id}" />
+
+        <!-- Nom, prénom, email, etc. -->
+        <div class="mb-3">
+            <label for="nom" class="form-label">Nom</label>
+            <input id="nom"
+                   type="text"
+                   th:field="*{nom}"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="prenom" class="form-label">Prénom</label>
+            <input id="prenom"
+                   type="text"
+                   th:field="*{prenom}"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email"
+                   type="email"
+                   th:field="*{email}"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="motDePasse" class="form-label">Mot de passe</label>
+            <input id="motDePasse"
+                   type="password"
+                   th:field="*{motDePasse}"
+                   class="form-control"
+                   th:attr="required=${user.id == null}" />
+        </div>
+
+        <!-- NOUVEAU : sélection du rôle -->
+        <div class="mb-3">
+            <label for="role" class="form-label">Rôle</label>
+            <select id="role"
+                    th:field="*{role.id}"
+                    class="form-select"
+                    required>
+                <option value="" disabled
+                        th:if="${user.id == null}"
+                        selected>-- Sélectionnez un rôle --</option>
+                <option th:each="r : ${roles}"
+                        th:value="${r.id}"
+                        th:text="${r.nom}"
+                        th:selected="${r.id} == ${user.role?.id}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                th:text="${user.id} == null ? 'Créer' : 'Enregistrer'">
+        </button>
+    </form>
+
+    <p class="mt-3">
+        <a th:href="@{/admin/users}" class="btn btn-secondary">
+            Retour à la liste
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

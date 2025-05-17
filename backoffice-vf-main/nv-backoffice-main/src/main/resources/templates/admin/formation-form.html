@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<head th:replace="
+      fragments/layout :: layoutHead(
+        ${formationDto.id} != null ? 'Modifier Formation' : 'Créer Formation'
+      )
+  " />
+
+<body th:replace="
+      fragments/layout :: layoutBody(
+        ~{fragments/navbar :: navbar},
+        ~{::content}
+      )
+  ">
+
+<div th:fragment="content" class="container mt-4">
+
+    <h1 th:text="${formationDto.id} != null ? 'Modifier Formation' : 'Créer Formation'"></h1>
+
+    <form th:object="${formationDto}"
+          th:action="${formationDto.id} != null
+                          ? @{/admin/formations/{id}/modifier(id=${formationDto.id})}
+                          : @{/admin/formations/nouveau}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <!-- champ caché pour l’édition -->
+        <input type="hidden" th:if="${formationDto.id} != null" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="titre" class="form-label">Titre :</label>
+            <input id="titre"
+                   type="text"
+                   th:field="*{titre}"
+                   class="form-control"
+                   placeholder="Titre de la formation"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description :</label>
+            <textarea id="description"
+                      th:field="*{description}"
+                      class="form-control"
+                      rows="4"
+                      placeholder="Présentation de la formation"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="dureeHeures" class="form-label">Durée (heures) :</label>
+            <input id="dureeHeures"
+                   type="number"
+                   th:field="*{dureeHeures}"
+                   class="form-control"
+                   min="0"
+                   step="0.1"
+                   placeholder="Ex. 2.5"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="imageFile" class="form-label">Image de couverture :</label>
+            <input id="imageFile"
+                   type="file"
+                   name="imageFile"
+                   class="form-control" />
+            <div th:if="${formationDto.imageUrl}">
+                <img th:src="@{/uploads/{f}(f=${formationDto.imageUrl})}"
+                     class="img-thumbnail mt-2"
+                     style="max-height:150px"
+                     alt="Aperçu de la formation"/>
+            </div>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary"
+                th:text="${formationDto.id} != null ? 'Mettre à jour' : 'Créer'">
+            Valider
+        </button>
+
+        <a th:href="@{/admin/formations}" class="btn btn-secondary ms-2">
+            Retour à la liste
+        </a>
+    </form>
+
+</div>
+
+</body>
+</html>

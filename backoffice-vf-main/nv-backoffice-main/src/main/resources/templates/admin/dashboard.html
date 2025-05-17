@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: layoutHead('Tableau de bord admin')}"></head>
+<body th:replace="~{fragments/layout :: layoutBody(~{fragments/navbar :: navbar},~{::content})}">
+
+<div th:fragment="content" class="container-fluid p-4">
+    <div class="row gx-4 gy-4">
+        <!-- Total Admins -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Admins</h6>
+                    <p class="display-4" th:text="${totalAdmins}">0</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Étudiants -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Étudiants</h6>
+                    <p class="display-4" th:text="${totalEtudiants}">0</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Formations -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Formations</h6>
+                    <p class="display-4" th:text="${totalFormations}">0</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Quiz -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Quiz</h6>
+                    <p class="display-4" th:text="${totalQuizzes}">0</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Rapports -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Rapports</h6>
+                    <p class="display-4" th:text="${totalRapports}">0</p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Résultats -->
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Résultats</h6>
+                    <p class="display-4" th:text="${totalResultats}">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

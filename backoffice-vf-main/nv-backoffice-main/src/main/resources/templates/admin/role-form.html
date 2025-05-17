@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<!-- head injecté depuis fragments/layout -->
+<head th:replace="~{fragments/layout :: layoutHead(
+                         ${role.id} != null ? 'Modifier le rôle' : 'Créer un nouveau rôle'
+                       )}"></head>
+
+<!-- body injecté avec navbar + zone de contenu -->
+<body th:replace="~{fragments/layout :: layoutBody(
+                         ~{fragments/navbar :: navbar},
+                         ~{::content}
+                       )}">
+
+<!-- contenu spécifique -->
+<div th:fragment="content" class="container mt-4">
+
+    <h1 th:text="${role.id} != null ? 'Modifier le rôle' : 'Créer un nouveau rôle'"></h1>
+
+    <form th:object="${role}"
+          th:action="${role.id} != null
+                           ? @{/admin/roles/{id}(id=${role.id})}
+                           : @{/admin/roles}"
+          method="post">
+
+        <div class="mb-3">
+            <label for="nom" class="form-label">Nom :</label>
+            <input id="nom"
+                   type="text"
+                   th:field="*{nom}"
+                   class="form-control"
+                   required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description :</label>
+            <textarea id="description"
+                      th:field="*{description}"
+                      class="form-control"
+                      required></textarea>
+        </div>
+
+        <button type="submit"
+                th:text="${role.id} != null ? 'Mettre à jour' : 'Créer'"
+                class="btn btn-primary">
+            Valider
+        </button>
+    </form>
+
+    <p class="mt-3">
+        <a th:href="@{/admin/roles}" class="btn btn-secondary">
+            Retour à la liste des rôles
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

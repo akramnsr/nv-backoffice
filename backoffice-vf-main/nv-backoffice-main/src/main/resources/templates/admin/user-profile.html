@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: layoutHead('Mon profil')}"></head>
+<body th:replace="~{fragments/layout :: layoutBody(~{fragments/navbar :: navbar},~{::content})}">
+
+<div th:fragment="content" class="container mt-4">
+    <h1>Mon profil</h1>
+    <table class="table">
+        <tr><th>Nom</th>
+            <td th:text="${user.nom}">Nom</td></tr>
+        <tr><th>Prénom</th>
+            <td th:text="${user.prenom}">Prénom</td></tr>
+        <tr><th>Email</th>
+            <td th:text="${user.email}">email@exemple.com</td></tr>
+        <tr><th>Date d'inscription</th>
+            <td th:text="${#dates.format(user.dateInscription, 'dd/MM/yyyy HH:mm')}">01/01/2025</td></tr>
+        <tr><th>Rôle</th>
+            <td th:text="${user.role.nom}">ADMIN</td></tr>
+    </table>
+</div>
+
+</body>
+</html>

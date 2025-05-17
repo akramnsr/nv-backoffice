@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<!-- 1) Remplace totalement le <head> par ton fragment de layout avec titre dynamique -->
+<head th:replace="~{fragments/layout :: layoutHead(
+                         ${rapportEtu.id} != null
+                           ? 'Modifier Rapport'
+                           : 'Créer Rapport'
+                       )}"></head>
+
+<!-- 2) Remplace totalement le <body> par layoutBody(navbar, content) -->
+<body th:replace="~{fragments/layout :: layoutBody(
+                          ~{fragments/navbar :: navbar},
+                          ~{::content}
+                        )}">
+
+<!-- 3) Ton fragment content, avec Bootstrap pour l’alignement et les styles -->
+<div th:fragment="content" class="container mt-4">
+
+    <h1 th:text="${rapportEtu.id} != null ? 'Modifier Rapport' : 'Créer Rapport'">
+        Rapport étudiant
+    </h1>
+
+    <form th:object="${rapportEtu}"
+          th:action="${rapportEtu.id} == null
+                            ? @{/admin/rapports-etu}
+                            : @{/admin/rapports-etu/{id}(id=${rapportEtu.id})}"
+          method="post">
+
+        <div class="mb-3">
+            <label for="etudiant" class="form-label">Étudiant :</label>
+            <select id="etudiant"
+                    th:field="*{etudiant.id}"
+                    class="form-control"
+                    required>
+                <option th:each="u : ${etudiants}"
+                        th:value="${u.id}"
+                        th:text="${u.nom + ' ' + u.prenom}"
+                        th:selected="${etudiant != null and u.id == etudiant.id}">
+                    Nom et Prénom
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="contenu" class="form-label">Contenu :</label>
+            <textarea id="contenu"
+                      th:field="*{contenu}"
+                      class="form-control"
+                      required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="dateSoumission" class="form-label">Date de soumission :</label>
+            <input id="dateSoumission"
+                   type="date"
+                   th:field="*{dateSoumission}"
+                   class="form-control"
+                   required />
+        </div>
+
+        <div class="mb-3">
+            <label for="commentaireFormateur" class="form-label">Commentaire formateur :</label>
+            <textarea id="commentaireFormateur"
+                      th:field="*{commentaireFormateur}"
+                      class="form-control"></textarea>
+        </div>
+
+        <button type="submit"
+                th:text="${rapportEtu.id} != null ? 'Mettre à jour' : 'Créer'"
+                class="btn btn-primary">
+            Valider
+        </button>
+    </form>
+
+    <p class="mt-3">
+        <a th:href="@{/admin/rapports-etu}"
+           class="btn btn-secondary">
+            Retour à la liste
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>
