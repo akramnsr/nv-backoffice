@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Entity
@@ -26,54 +25,42 @@ public class Resultat {
     @Column(length = 50)
     private String statut;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    // ————————————— Lien vers l’étudiant —————————————
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "etudiant_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User etudiant;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "quiz_id", nullable = false)
+    private Quiz quiz;
 
     public Resultat() {}
 
-    public Resultat(Double score, Date datePassage, String statut, User etudiant) {
-        this.score = score;
+    public Resultat(Double score, Date datePassage, String statut, User etudiant, Quiz quiz) {
+        this.score       = score;
         this.datePassage = datePassage;
-        this.statut = statut;
-        this.etudiant = etudiant;
+        this.statut      = statut;
+        this.etudiant    = etudiant;
+        this.quiz        = quiz;
     }
 
-    // --- getters & setters ---
+    // ————— Getters / Setters —————
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Double getScore() {
-        return score;
-    }
-    public void setScore(Double score) {
-        this.score = score;
-    }
+    public Double getScore() { return score; }
+    public void setScore(Double score) { this.score = score; }
 
-    public Date getDatePassage() {
-        return datePassage;
-    }
-    public void setDatePassage(Date datePassage) {
-        this.datePassage = datePassage;
-    }
+    public Date getDatePassage() { return datePassage; }
+    public void setDatePassage(Date datePassage) { this.datePassage = datePassage; }
 
-    public String getStatut() {
-        return statut;
-    }
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
+    public String getStatut() { return statut; }
+    public void setStatut(String statut) { this.statut = statut; }
 
-    public User getEtudiant() {
-        return etudiant;
-    }
-    public void setEtudiant(User etudiant) {
-        this.etudiant = etudiant;
-    }
+    public User getEtudiant() { return etudiant; }
+    public void setEtudiant(User etudiant) { this.etudiant = etudiant; }
+
+    public Quiz getQuiz() { return quiz; }
+    public void setQuiz(Quiz quiz) { this.quiz = quiz; }
 }

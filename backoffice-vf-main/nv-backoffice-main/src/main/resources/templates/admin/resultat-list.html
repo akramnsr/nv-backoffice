@@ -1,36 +1,26 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      lang="fr">
-
-<!-- head injecté depuis fragments/layout -->
-<head th:replace="~{fragments/layout :: layoutHead('Liste des résultats')}">
-</head>
-
-<!-- body injecté avec navbar + zone de contenu -->
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head th:replace="~{fragments/layout :: layoutHead('Résultats')}"></head>
 <body th:replace="~{fragments/layout :: layoutBody(
-                        ~{fragments/navbar :: navbar},
-                        ~{::content}
-                     )}">
+         ~{fragments/navbar :: navbar},
+         ~{::content}
+       )}">
 
-<!-- tout ce qui suit est votre contenu spécifique -->
-<div th:fragment="content">
-
+<div th:fragment="content" class="container mt-4">
   <h1>Résultats</h1>
-
   <p>
-    <a th:href="@{/admin/resultats/nouveau}"
-       class="btn btn-primary mb-3">
+    <a class="btn btn-primary" th:href="@{/admin/resultats/nouveau}">
       Nouveau résultat
     </a>
   </p>
-
-  <table class="table">
+  <table class="table table-striped">
     <thead>
     <tr>
       <th>ID</th>
+      <th>Étudiant</th>
+      <th>Quiz</th>
       <th>Score</th>
-      <th>Date de passage</th>
+      <th>Date</th>
       <th>Statut</th>
       <th>Actions</th>
     </tr>
@@ -38,21 +28,17 @@
     <tbody>
     <tr th:each="r : ${resultats}">
       <td th:text="${r.id}">1</td>
-      <td th:text="${r.score}">0</td>
-      <td th:text="${#dates.format(r.datePassage, 'yyyy-MM-dd HH:mm')}">
-        2025-01-01 12:00
-      </td>
-      <td th:text="${r.statut}">Statut</td>
+      <td th:text="${r.etudiant.nom} + ' ' + ${r.etudiant.prenom}">Alice</td>
+      <td th:text="${r.quiz.titre}">Quiz 1</td>
+      <td th:text="${r.score}">0.0</td>
+      <td th:text="${#dates.format(r.datePassage, 'dd/MM/yyyy HH:mm')}">—</td>
+      <td th:text="${r.statut}">—</td>
       <td>
         <a th:href="@{/admin/resultats/{id}/modifier(id=${r.id})}"
-           class="btn btn-sm btn-outline-secondary">
-          Éditer
-        </a>
-        &nbsp;
+           class="btn btn-sm btn-outline-secondary">Modifier</a>
         <form th:action="@{/admin/resultats/{id}/supprimer(id=${r.id})}"
-              method="post"
-              style="display:inline"
-              th:onsubmit="|return confirm('Supprimer le résultat #'+${r.id}+' ?');|">
+              method="post" style="display:inline"
+              onsubmit="return confirm('Supprimer ce résultat ?');">
           <button type="submit" class="btn btn-sm btn-outline-danger">
             Supprimer
           </button>
@@ -61,8 +47,6 @@
     </tr>
     </tbody>
   </table>
-
 </div>
-
 </body>
 </html>
