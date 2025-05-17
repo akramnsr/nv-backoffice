@@ -3,7 +3,6 @@ package com.elearning.model;
 
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.util.Date;
 
 @Entity
@@ -14,24 +13,27 @@ public class RapportEtu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 2000)
     private String contenu;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(nullable = false)
     private Date dateSoumission;
 
+    @Column(length = 2000)
     private String commentaireFormateur;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "etudiant_id")
     private User etudiant;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "formation_id")
+    private Formation formation;
+
     public RapportEtu() {}
 
-    public RapportEtu(String contenu, Date dateSoumission, String commentaireFormateur) {
-        this.contenu = contenu;
-        this.dateSoumission = dateSoumission;
-        this.commentaireFormateur = commentaireFormateur;
-    }
+    // getters / setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -49,4 +51,7 @@ public class RapportEtu {
 
     public User getEtudiant() { return etudiant; }
     public void setEtudiant(User etudiant) { this.etudiant = etudiant; }
+
+    public Formation getFormation() { return formation; }
+    public void setFormation(Formation formation) { this.formation = formation; }
 }

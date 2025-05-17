@@ -1,17 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="fr">
-<head th:replace="~{fragments/layout :: layoutHead('Liste des formations')}"></head>
-<body th:replace="~{fragments/layout :: layoutBody(
-         ~{fragments/navbar :: navbar},
-         ~{::content}
-       )}">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- 1) On remplace le head via le fragment layoutHead(...) -->
+<head th:replace="fragments/layout :: layoutHead('Liste des formations')" />
+
+<!-- 2) On remplace entièrement le body via le fragment layoutBody(navbar, content) -->
+<body th:replace="fragments/layout :: layoutBody(
+                       ~{fragments/navbar :: navbar},
+                       ~{::content}
+                     )">
+
+<!-- 3) On définit ici le fragment content qui sera injecté dans layoutBody -->
 <div th:fragment="content" class="container mt-4">
     <h1>Formations</h1>
     <p>
-        <a class="btn btn-primary mb-3" th:href="@{/admin/formations/nouveau}">
+        <a class="btn btn-primary mb-3"
+           th:href="@{/admin/formations/nouveau}">
             Nouvelle formation
         </a>
     </p>
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -25,42 +33,36 @@
         </thead>
         <tbody>
         <tr th:each="f : ${formations}"
-            th:onclick="|window.location='@{/admin/formations/{id}(id=${f.id})}'|"
-            style="cursor:pointer">
+            style="cursor:pointer"
+            th:onclick="|window.location='@{/admin/formations/{id}(id=${f.id})}'|">
             <td th:text="${f.id}">1</td>
             <td th:text="${f.titre}">Titre</td>
-            <td th:text="${f.description}">Desc</td>
+            <td th:text="${f.description}">Description</td>
             <td th:text="${f.dureeHeures}">0</td>
             <td th:text="${f.nombreQuiz}">0</td>
             <td>
                 <a th:href="@{/admin/formations/{id}/modifier(id=${f.id})}"
-                   class="btn btn-sm btn-outline-secondary">Modifier</a>
+                   class="btn btn-sm btn-outline-secondary"
+                   onclick="event.stopPropagation()">
+                    Modifier
+                </a>
                 <form th:action="@{/admin/formations/{id}/supprimer(id=${f.id})}"
-                      method="post" style="display:inline"
-                      onsubmit="return confirm('Supprimer « [[${f.titre}]] » ?');">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      method="post"
+                      style="display:inline"
+                      onsubmit="return confirm('Supprimer « [[${f.titre}]] » ?');"
+                      onclick="event.stopPropagation()">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="event.stopPropagation()">
                         Supprimer
                     </button>
                 </form>
             </td>
         </tr>
+
         </tbody>
     </table>
-
-    <!-- Pagination -->
-    <nav th:if="${totalPages} > 1" aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{|/admin/formations?page=${currentPage - 1}&size=${param.size}|}">Précédent</a>
-            </li>
-            <li class="page-item disabled">
-                <span class="page-link">Page [[${currentPage + 1}]] / [[${totalPages}]]</span>
-            </li>
-            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{|/admin/formations?page=${currentPage + 1}&size=${param.size}|}">Suivant</a>
-            </li>
-        </ul>
-    </nav>
 </div>
+
 </body>
 </html>

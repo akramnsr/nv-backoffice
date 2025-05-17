@@ -1,0 +1,44 @@
+<!-- src/main/resources/templates/admin/rapport-etu-details.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head th:replace="~{fragments/layout :: layoutHead('Détail du rapport')}"></head>
+<body th:replace="~{fragments/layout :: layoutBody(
+                    ~{fragments/navbar :: navbar},
+                    ~{::content}
+                  )}">
+<div th:fragment="content" class="container mt-4">
+    <h1>Détail du rapport</h1>
+    <dl class="row">
+        <dt class="col-sm-3">ID</dt>
+        <dd class="col-sm-9" th:text="${rapport.id}">1</dd>
+
+        <dt class="col-sm-3">Formation</dt>
+        <dd class="col-sm-9" th:text="${rapport.formation.titre}">Titre formation</dd>
+
+        <dt class="col-sm-3">Étudiant</dt>
+        <dd class="col-sm-9"
+            th:text="${rapport.etudiant.nom + ' ' + rapport.etudiant.prenom}">
+            Nom Prénom
+        </dd>
+
+        <dt class="col-sm-3">Contenu</dt>
+        <dd class="col-sm-9" th:text="${rapport.contenu}">Contenu du rapport</dd>
+
+        <dt class="col-sm-3">Date de soumission</dt>
+        <dd class="col-sm-9"
+            th:text="${#dates.format(rapport.dateSoumission,'yyyy-MM-dd')}">
+            2025-01-01
+        </dd>
+
+        <dt class="col-sm-3">Commentaire formateur</dt>
+        <dd class="col-sm-9" th:text="${rapport.commentaireFormateur}">
+            Commentaire
+        </dd>
+    </dl>
+
+    <a th:href="@{/admin/rapports-etu}" class="btn btn-secondary">← Retour</a>
+    <a th:href="@{/admin/rapports-etu/{id}/edit(id=${rapport.id})}"
+       class="btn btn-primary ms-2">✎ Modifier</a>
+</div>
+</body>
+</html>

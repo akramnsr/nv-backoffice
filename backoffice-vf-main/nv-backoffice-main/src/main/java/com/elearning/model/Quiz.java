@@ -21,15 +21,16 @@ public class Quiz {
     private int duree;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // <-- permet le binding de "2025-05-24"
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date dateInscription;
-
-
 
     @ManyToOne
     @JoinColumn(name = "formation_id")
     private Formation formation;
 
+    // --- NOUVEAU CHAMP ---
+    @Column(name = "image_url")
+    private String imageUrl;
 
     public Quiz() {}
 
@@ -41,7 +42,12 @@ public class Quiz {
         this.dateInscription = dateInscription;
     }
 
-
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTitre() { return titre; }

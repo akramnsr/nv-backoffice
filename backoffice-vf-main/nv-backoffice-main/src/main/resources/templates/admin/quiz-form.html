@@ -2,30 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="fr">
-
-<head th:replace="
-      fragments/layout :: layoutHead(
-        ${quiz.id} != null ? 'Modifier Quiz' : 'Créer Quiz'
-      )
-  " />
-
-<body th:replace="
-      fragments/layout :: layoutBody(
-        ~{fragments/navbar :: navbar},
-        ~{::content}
-      )
-  ">
-
+<head th:replace="~{fragments/layout :: layoutHead(
+                  ${quiz.id} != null ? 'Modifier Quiz' : 'Créer Quiz')}"/>
+<body th:replace="~{fragments/layout :: layoutBody(
+                  ~{fragments/navbar :: navbar}, ~{::content})}">
 <div th:fragment="content" class="container mt-4">
 
     <h1 th:text="${quiz.id} != null ? 'Modifier Quiz' : 'Créer Quiz'"></h1>
 
+    <!-- Note : enctype multipart/form-data -->
     <form th:object="${quiz}"
           th:action="${quiz.id} != null
-                          ? @{/admin/quiz/{id}(id=${quiz.id})}
-                          : @{/admin/quiz}"
-          method="post">
-        <input type="hidden" th:if="${quiz.id} != null" th:field="*{id}" />
+                    ? @{/admin/quiz/{id}(id=${quiz.id})}
+                    : @{/admin/quiz}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <input type="hidden" th:if="${quiz.id} != null" th:field="*{id}"/>
 
         <div class="mb-3">
             <label for="titre" class="form-label">Titre :</label>
@@ -87,11 +80,27 @@
             </select>
         </div>
 
+        <div class="mb-3" th:if="${quiz.imageUrl}">
+            <label class="form-label">Image actuelle :</label><br/>
+            <img th:src="@{'/uploads/' + ${quiz.imageUrl}}"
+                 class="img-thumbnail"
+                 style="max-width:200px"/>
+            <!-- on garde l’URL si pas de nouvelle image -->
+            <input type="hidden" th:field="*{imageUrl}"/>
+        </div>
+        <div class="mb-3">
+            <label for="imageFile" class="form-label">Photo de couverture :</label>
+            <input id="imageFile"
+                   type="file"
+                   name="imageFile"
+                   class="form-control"/>
+        </div>
         <button type="submit"
                 class="btn btn-primary"
                 th:text="${quiz.id} != null ? 'Mettre à jour' : 'Créer'">
             Valider
         </button>
+        <a th:href="@{/admin/quiz}" class="btn btn-secondary ms-2">Retour</a>
     </form>
 
     <p class="mt-3">

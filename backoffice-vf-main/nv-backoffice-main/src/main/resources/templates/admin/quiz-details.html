@@ -1,0 +1,48 @@
+<!-- src/main/resources/templates/admin/quiz-details.html -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<head th:replace="~{fragments/layout :: layoutHead('Détails du quiz')}"/>
+<body th:replace="~{fragments/layout :: layoutBody(
+                  ~{fragments/navbar :: navbar}, ~{::content})}">
+
+<div th:fragment="content" class="container mt-4">
+    <h1 th:text="${quiz.titre}">Titre du quiz</h1>
+
+    <!-- Image de couverture si présente -->
+    <div th:if="${quiz.imageUrl}">
+        <img th:src="@{'/uploads/' + ${quiz.imageUrl}}"
+             class="img-fluid mb-4"
+             alt="Image du quiz"/>
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Description :</dt>
+        <dd class="col-sm-9" th:text="${quiz.description}">…</dd>
+
+        <dt class="col-sm-3">Nombre de questions :</dt>
+        <dd class="col-sm-9" th:text="${quiz.nbQuestions}">…</dd>
+
+        <dt class="col-sm-3">Durée (min) :</dt>
+        <dd class="col-sm-9" th:text="${quiz.duree}">…</dd>
+
+        <dt class="col-sm-3">Date d’inscription :</dt>
+        <dd class="col-sm-9"
+            th:text="${#dates.format(quiz.dateInscription, 'dd/MM/yyyy')}">…</dd>
+
+        <dt class="col-sm-3">Formation associée :</dt>
+        <dd class="col-sm-9">
+            <a th:href="@{/admin/formations/{id}(id=${quiz.formation.id})}"
+               th:text="${quiz.formation.titre}">Nom de la formation</a>
+        </dd>
+    </dl>
+
+    <a th:href="@{/admin/quiz}" class="btn btn-secondary">← Retour à la liste des quiz</a>
+    <a th:href="@{/admin/quiz/{id}/modifier(id=${quiz.id})}"
+       class="btn btn-primary ms-2">Modifier ce quiz</a>
+</div>
+
+</body>
+</html>
