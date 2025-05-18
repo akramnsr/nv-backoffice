@@ -4,12 +4,12 @@ import com.elearning.model.Formation;
 import com.elearning.model.Quiz;
 import com.elearning.service.FormationService;
 import com.elearning.service.QuizService;
-import com.elearning.service.StorageService;        // <-- import
+import com.elearning.service.StorageService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile; // <-- import
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public class AdminQuizMvcController {
 
     private final QuizService quizService;
     private final FormationService formationService;
-    private final StorageService storageService;    // <-- champ
+    private final StorageService storageService;
 
     public AdminQuizMvcController(QuizService quizService,
                                   FormationService formationService,
                                   StorageService storageService) {
-        this.quizService = quizService;
+        this.quizService      = quizService;
         this.formationService = formationService;
-        this.storageService   = storageService;    // <-- initialisation
+        this.storageService   = storageService;
     }
 
     @GetMapping
@@ -48,11 +48,9 @@ public class AdminQuizMvcController {
     public String create(@ModelAttribute Quiz quiz,
                          @RequestParam("formationId") Long formationId,
                          @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
-        // liaison formation
         Formation f = formationService.findById(formationId)
                 .orElseThrow(() -> new IllegalArgumentException("Formation introuvable"));
         quiz.setFormation(f);
-        // stockage de l’image si présente
         if (imageFile != null && !imageFile.isEmpty()) {
             quiz.setImageUrl(storageService.store(imageFile));
         }
@@ -86,7 +84,8 @@ public class AdminQuizMvcController {
         return "redirect:/admin/quiz";
     }
 
-    @GetMapping("/{id}/supprimer")
+    /** Suppression via POST */
+    @PostMapping("/{id}/supprimer")
     public String delete(@PathVariable Long id) {
         quizService.delete(id);
         return "redirect:/admin/quiz";

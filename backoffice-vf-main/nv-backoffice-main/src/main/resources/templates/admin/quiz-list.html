@@ -3,24 +3,19 @@
       xmlns:th="http://www.thymeleaf.org"
       lang="fr">
 
-<!-- Remplace correctement le <head> via votre fragment -->
 <head th:replace="~{fragments/layout :: layoutHead('Liste des quiz')}"></head>
 
-<!-- Remplace le <body> via votre fragment en injectant navbar + content -->
 <body th:replace="~{fragments/layout :: layoutBody(
                       ~{fragments/navbar :: navbar},
                       ~{::content}
                     )}">
 
-<!-- Fragment CONTENT injecté dans layoutBody -->
 <div th:fragment="content" class="container mt-4">
 
     <h1>Liste des quiz</h1>
 
-    <!-- Créer un nouveau quiz : stopPropagation pour ne pas déclencher le tr#onclick -->
     <a th:href="@{/admin/quiz/nouveau}"
-       class="btn btn-primary mb-3"
-       onclick="event.stopPropagation()">
+       class="btn btn-primary mb-3">
         Créer un nouveau quiz
     </a>
 
@@ -31,15 +26,12 @@
             <th>ID</th>
             <th>Titre</th>
             <th>Description</th>
+            <th>Formation</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody th:each="quiz : ${quizzes}">
-
-        <!-- Clic sur la ligne : détail -->
-        <tr th:onclick="|window.location='@{/admin/quiz/{id}(id=${quiz.id})}'|"
-            style="cursor:pointer">
-
+        <tr>
             <!-- Image -->
             <td>
                 <img th:if="${quiz.imageUrl}"
@@ -49,45 +41,41 @@
                      alt="Visuel du quiz"/>
             </td>
 
-            <!-- ID (lien vers détail + stopPropagation) -->
+            <!-- ID : lien vers détail -->
             <td>
                 <a th:href="@{/admin/quiz/{id}(id=${quiz.id})}"
-                   th:text="${quiz.id}"
-                   onclick="event.stopPropagation()">
-                </a>
+                   th:text="${quiz.id}"></a>
             </td>
 
-            <!-- Titre (idem) -->
+            <!-- Titre : lien vers détail -->
             <td>
                 <a th:href="@{/admin/quiz/{id}(id=${quiz.id})}"
-                   th:text="${quiz.titre}"
-                   onclick="event.stopPropagation()">
-                </a>
+                   th:text="${quiz.titre}"></a>
             </td>
 
             <!-- Description -->
             <td th:text="${quiz.description}">Description</td>
 
+            <!-- Formation -->
+            <td th:text="${quiz.formation != null} ? ${quiz.formation.titre} : '-'">Formation</td>
+
             <!-- Actions -->
             <td>
-                <!-- Modifier -->
                 <a th:href="@{/admin/quiz/{id}/modifier(id=${quiz.id})}"
-                   class="btn btn-sm btn-outline-secondary"
-                   onclick="event.stopPropagation()">
+                   class="btn btn-sm btn-outline-secondary">
                     Modifier
                 </a>
 
-                <!-- Supprimer en GET, avec confirmation + stopPropagation -->
-                <a th:href="@{/admin/quiz/{id}/supprimer(id=${quiz.id})}"
-                   class="btn btn-sm btn-outline-danger"
-                   onclick="
-                   event.stopPropagation();
-                   return confirm('Vraiment supprimer ce quiz ?');
-                 ">
-                    Supprimer
-                </a>
+                <form th:action="@{/admin/quiz/{id}/supprimer(id=${quiz.id})}"
+                      method="post"
+                      style="display:inline"
+                      onsubmit="return confirm('Vraiment supprimer ce quiz ?');">
+                    <button type="submit"
+                            class="btn btn-sm btn-outline-danger">
+                        Supprimer
+                    </button>
+                </form>
             </td>
-
         </tr>
         </tbody>
     </table>

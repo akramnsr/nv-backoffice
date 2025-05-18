@@ -58,10 +58,15 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+                        // Autorise signup/login SANS authentification
+                        .requestMatchers("/api/auth/signup", "/api/auth/login").permitAll()
                         .anyRequest().authenticated()
+
                 );
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

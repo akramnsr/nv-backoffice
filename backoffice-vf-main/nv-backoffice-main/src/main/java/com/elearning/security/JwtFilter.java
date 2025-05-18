@@ -65,4 +65,11 @@ public class JwtFilter extends OncePerRequestFilter {
         // Continuer la chaîne de filtres
         chain.doFilter(request, response);
     }
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+//        String path = request.getRequestURI();
+//        // Ignore le filter pour les GET /api/formations et /api/formations/{id}
+//        return request.getMethod().equals("GET") && (path.equals("/api/formations") || path.startsWith("/api/formations/"));
+//    }
+
 }

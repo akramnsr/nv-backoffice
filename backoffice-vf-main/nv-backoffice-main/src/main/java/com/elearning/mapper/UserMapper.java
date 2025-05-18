@@ -14,7 +14,7 @@ public class UserMapper {
         dto.setPrenom(u.getPrenom());
         dto.setEmail(u.getEmail());
         dto.setDateInscription(u.getDateInscription());
-        dto.setRoleName(u.getRole() != null ? u.getRole().getNom() : null);
+        dto.setRoleName(u.getRole().getNom());
         return dto;
     }
 

@@ -22,11 +22,12 @@ public class JpaUserDetailsService implements UserDetailsService {
         User u = users.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email inconnu : " + email));
         // on transforme votre Role en "ROLE_ADMIN" ou "ROLE_ETUDIANT"
-        String roleName = u.getRole().getNom();
+        String roleName = u.getRole() != null ? u.getRole().getNom() : null;
         return new org.springframework.security.core.userdetails.User(
                 u.getEmail(),
                 u.getMotDePasse(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + roleName)));
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + roleName)
+                ));
 
     }
 }

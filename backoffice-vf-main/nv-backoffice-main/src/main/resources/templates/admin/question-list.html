@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head th:replace="~{fragments/layout :: layoutHead('Questions')}"></head>
+<body th:replace="~{fragments/layout :: layoutBody(
+                   ~{fragments/navbar :: navbar},
+                   ~{::content})}">
+<div th:fragment="content" class="container mt-4">
+    <h1 th:text="'Questions pour le quiz « ' + ${quiz.titre} + ' »'"/>
+    <p>
+        <a th:href="@{/admin/quiz/{quizId}/questions/new(quizId=${quiz.id})}"
+           class="btn btn-primary mb-3">Nouvelle question</a>
+    </p>
+    <form th:action="@{/admin/quiz/{quizId}/questions/import(quizId=${quiz.id})}"
+          method="post" enctype="multipart/form-data" class="mb-3">
+        <input type="file" name="file" accept=".csv" required/>
+        <button class="btn btn-sm btn-outline-secondary">Importer CSV</button>
+    </form>
+    <table class="table">
+        <thead>
+        <tr><th>Libellé</th><th>#</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="q : ${questions}">
+            <td th:text="${q.libelle}">Libellé</td>
+            <td th:text="${#lists.size(q.choices)} + ' choix'">0</td>
+            <td>
+                <a th:href="@{/admin/quiz/{quizId}/questions/{id}/edit(
+                         quizId=${quiz.id},id=${q.id})}"
+                   class="btn btn-sm btn-outline-secondary">Éditer</a>
+                <form th:action="@{/admin/quiz/{quizId}/questions/{id}/delete(
+                         quizId=${quiz.id},id=${q.id})}"
+                      method="post" style="display:inline"
+                      onsubmit="return confirm('Supprimer ?');">
+                    <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/admin/quiz}" class="btn btn-secondary">Retour aux quizzes</a>
+</div>
+</body>
+</html>

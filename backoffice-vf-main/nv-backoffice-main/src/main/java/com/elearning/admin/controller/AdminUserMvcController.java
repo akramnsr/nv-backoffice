@@ -74,7 +74,7 @@ public class AdminUserMvcController {
         Role r = roleService.findById(roleId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Rôle introuvable : " + roleId));
-        user.setRole(r);
+        user.setRole(r);  // ✅ CORRECT !
         userService.save(user);
         return "redirect:/admin/users/etudiants";
     }
@@ -107,7 +107,7 @@ public class AdminUserMvcController {
                 .orElseThrow(() ->
                         new IllegalArgumentException("Rôle introuvable : " + roleId));
         user.setId(id);
-        user.setRole(r);
+        user.setRole(r);  // ✅ CORRECT !
         userService.save(user);
         return "redirect:/admin/users";
     }
