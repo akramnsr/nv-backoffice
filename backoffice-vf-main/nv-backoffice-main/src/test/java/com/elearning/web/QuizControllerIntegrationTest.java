@@ -7,6 +7,9 @@ import com.elearning.model.User;
 import com.elearning.repository.QuizRepository;
 import com.elearning.repository.RoleRepository;
 import com.elearning.repository.UserRepository;
+import com.elearning.repository.RapportEtuRepository;  // <-- Ajoute ceci
+import com.elearning.repository.ResultatRepository;    // <-- Si besoin
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,15 +41,24 @@ class QuizControllerIntegrationTest extends BaseIntegrationTest {
     @Autowired
     private TestRestTemplate rest;
 
+    @Autowired
+    private RapportEtuRepository rapportRepo;    // <-- Ajoute ceci
+    @Autowired(required = false)
+    private ResultatRepository resultatRepo;     // <-- Si tu as Resultat
+
     @BeforeEach
     void setup() {
-        // On vide et on crée une entrée Quiz
-        repo.deleteAll();
-        repo.save(new Quiz("Un titre", "Desc", 3, 15, new Date()));
+        // D'abord, supprimer les rapports et résultats qui référencent des users
+        if (resultatRepo != null) resultatRepo.deleteAll(); // Si tu as une table Resultat
+        rapportRepo.deleteAll(); // D'abord les enfants
 
-        // Pour bypasser la sécurité JWT, on crée quand même un user + rôle
+        repo.deleteAll();
+
         userRepo.deleteAll();
         roleRepo.deleteAll();
+
+        // Création des données de test
+        repo.save(new Quiz("Un titre", "Desc", 3, 15, new Date()));
         var etuRole = new Role("ETUDIANT", "étudiant");
         roleRepo.save(etuRole);
 
@@ -59,12 +71,10 @@ class QuizControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void listPageRenders() {
-        // GET public, on n’envoie PAS de BasicAuth
         String json = rest.getForObject(
                 "http://localhost:" + port + "/api/quizzes",
                 String.class
         );
-
         assertThat(json).contains("Un titre");
     }
 }

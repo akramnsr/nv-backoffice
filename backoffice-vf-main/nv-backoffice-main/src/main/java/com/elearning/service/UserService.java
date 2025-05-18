@@ -20,4 +20,5 @@ public interface UserService {
     /** Auth & filtres */
     Optional<User> findByEmail(String email);
     List<User> findAllByRoleName(String roleName);
+
 }

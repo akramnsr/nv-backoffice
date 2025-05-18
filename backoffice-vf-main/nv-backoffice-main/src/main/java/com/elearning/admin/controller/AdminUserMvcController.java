@@ -129,4 +129,6 @@ public class AdminUserMvcController {
         model.addAttribute("user", user);
         return "admin/user-profile";
     }
+
+
 }

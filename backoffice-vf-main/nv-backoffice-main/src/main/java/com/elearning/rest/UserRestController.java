@@ -8,7 +8,10 @@ import com.elearning.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -50,4 +53,32 @@ public class UserRestController {
                 );
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/etudiants")
+    public ResponseEntity<List<UserDto>> listEtudiants() {
+        // Va chercher tous les users qui ont le rôle "ETUDIANT"
+        List<UserDto> dtos = service.findAllByRoleName("ETUDIANT")
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+
+
+        return ResponseEntity.ok(dtos);
+    }
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
+        String email = (authentication != null) ? authentication.getName() : null;
+        if (email == null) {
+            return ResponseEntity.status(401).build();
+        }
+        UserDto dto = service.findByEmail(email)
+                .map(mapper::toDto)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Utilisateur introuvable pour l'email " + email
+                        )
+                );
+        return ResponseEntity.ok(dto);
+    }
+
 }

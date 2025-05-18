@@ -62,4 +62,8 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllByRoleName(String roleName) {
         return repo.findAllByRoleNom(roleName);
     }
+
+
+
+
 }

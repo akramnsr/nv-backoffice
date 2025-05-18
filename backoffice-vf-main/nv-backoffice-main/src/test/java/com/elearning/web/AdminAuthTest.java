@@ -5,6 +5,7 @@ import com.elearning.model.Role;
 import com.elearning.model.User;
 import com.elearning.repository.RoleRepository;
 import com.elearning.repository.UserRepository;
+import com.elearning.repository.RapportEtuRepository; // à importer
 import com.elearning.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,9 @@ public class AdminAuthTest {
     private RoleRepository roleRepo;
 
     @Autowired
+    private RapportEtuRepository rapportRepo; // <--- AJOUTÉ
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
@@ -43,10 +47,14 @@ public class AdminAuthTest {
 
     @BeforeEach
     void setup() {
+        // 1. Supprimer les dépendances qui référencent les users (avant userRepo.deleteAll)
+        rapportRepo.deleteAll();    // <--- AJOUTÉ
+
+        // 2. Ensuite seulement, supprimer les users et rôles
         userRepo.deleteAll();
         roleRepo.deleteAll();
 
-        // on crée bien un rôle ADMIN
+        // 3. Recréer rôle et admin
         Role adminRole = new Role("ADMIN", "Administrateur");
         roleRepo.save(adminRole);
 
