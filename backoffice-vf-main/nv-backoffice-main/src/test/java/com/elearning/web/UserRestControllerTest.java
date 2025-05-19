@@ -28,6 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(UserRestController.class)
 class UserRestControllerTest {
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
 
     @Autowired
     private MockMvc mvc;
@@ -43,6 +48,7 @@ class UserRestControllerTest {
 
     @MockBean
     private UserMapper mapper;
+
 
     @Test
     @DisplayName("GET /api/users renvoie bien une page de DTO")

@@ -28,6 +28,11 @@ import static org.hamcrest.Matchers.*;
 @AutoConfigureMockMvc(addFilters = false)  // DÉSACTIVE LA SÉCURITÉ SPRING
 @WebMvcTest(RoleRestController.class)
 class RoleControllerStandaloneTest {
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
 
     @Autowired
     private MockMvc mvc;

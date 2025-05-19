@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "quiz")
@@ -31,6 +33,16 @@ public class Quiz {
     // --- NOUVEAU CHAMP ---
     @Column(name = "image_url")
     private String imageUrl;
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Question> questions; // <-- SET au lieu de List
+
+
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
 
     public Quiz() {}
 

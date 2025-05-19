@@ -12,4 +12,6 @@ public interface QuizService {
     Quiz save(Quiz quiz);
     void delete(Long id);
     long countAll();
+    Optional<Quiz> findByIdWithQuestions(Long id);
+
 }

@@ -32,6 +32,11 @@ class FormationControllerStandaloneTest {
     private MockMvc mvc;
     @MockBean
     private com.elearning.security.JwtFilter jwtFilter;
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;  // <--- AJOUTE CETTE LIGNE
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;  // <--- AJOUTE CETTE LIGNE
 
     @MockBean
     private com.elearning.security.JwtUtil jwtUtil;

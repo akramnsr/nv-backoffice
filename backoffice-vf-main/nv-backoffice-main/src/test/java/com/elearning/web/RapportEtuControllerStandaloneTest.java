@@ -24,14 +24,24 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc(addFilters = false)  // DÉSACTIVE LA SÉCURITÉ SPRING
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(RapportEtuRestController.class)
 class RapportEtuControllerStandaloneTest {
 
     @Autowired
     private MockMvc mvc;
+
     @MockBean
     private com.elearning.security.JwtFilter jwtFilter;
+
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
+
+    @MockBean
+    private com.elearning.repository.RapportEtuRepository rapportEtuRepository; // <-- AJOUTE CECI !
 
     @MockBean
     private com.elearning.security.JwtUtil jwtUtil;

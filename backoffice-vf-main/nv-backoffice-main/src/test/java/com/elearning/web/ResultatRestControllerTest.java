@@ -3,6 +3,7 @@ package com.elearning.web;
 import com.elearning.dto.ResultatDto;
 import com.elearning.mapper.ResultatMapper;
 import com.elearning.model.Resultat;
+import com.elearning.repository.UserRepository;
 import com.elearning.rest.ResultatRestController;
 import com.elearning.service.ResultatService;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class ResultatRestControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
+
+    @MockBean
+    private com.elearning.repository.QuizRepository quizRepository;
+
+    @MockBean
+    private com.elearning.repository.ResultatRepository resultatRepository;
 
     @MockBean
     private com.elearning.security.JwtFilter jwtFilter;
@@ -41,6 +51,9 @@ class ResultatRestControllerTest {
 
     @MockBean
     private ResultatMapper mapper;
+
+    @Autowired
+    private MockMvc mvc;
 
     @Test
     @DisplayName("GET /api/resultats renvoie bien une page de DTO")

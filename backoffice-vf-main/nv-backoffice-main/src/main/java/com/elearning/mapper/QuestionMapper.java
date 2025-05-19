@@ -6,6 +6,8 @@ import com.elearning.model.Question;
 import com.elearning.model.Choice;
 import com.elearning.model.Quiz;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 
@@ -32,7 +34,8 @@ public class QuestionMapper {
         q.setQuiz(quiz);   // <-- setter de l’entité
 
         q.setChoices(
-                dto.getChoices().stream()
+                new HashSet<>( // <-- HashSet au lieu de ArrayList
+                        dto.getChoices().stream()
                         .map(cd -> {
                             Choice c = new Choice();
                             c.setId(cd.getId());
@@ -42,6 +45,7 @@ public class QuestionMapper {
                             return c;
                         })
                         .collect(Collectors.toList())
+                )
         );
 
         return q;

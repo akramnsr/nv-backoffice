@@ -5,12 +5,11 @@ import jakarta.persistence.*;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "question")
 public class Question {
-
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -22,7 +21,8 @@ public class Question {
     private Quiz quiz;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Choice> choices;
+    private Set<Choice> choices; // <-- Set au lieu de List
+
 
     public Long getId() {
         return id;
@@ -48,11 +48,11 @@ public class Question {
         this.quiz = quiz;
     }
 
-    public List<Choice> getChoices() {
+    public Set<Choice> getChoices() {
         return choices;
     }
 
-    public void setChoices(List<Choice> choices) {
+    public void setChoices(Set<Choice> choices) {
         this.choices = choices;
     }
 

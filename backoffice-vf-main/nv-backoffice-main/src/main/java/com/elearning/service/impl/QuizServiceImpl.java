@@ -50,4 +50,10 @@ public class QuizServiceImpl implements QuizService {
     public long countAll() {
         return repo.count();
     }
+
+    @Override
+    public Optional<Quiz> findByIdWithQuestions(Long id) {
+        return repo.findByIdWithQuestions(id);
+    }
+
 }

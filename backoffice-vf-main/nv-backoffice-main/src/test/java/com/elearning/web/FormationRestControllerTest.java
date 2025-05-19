@@ -32,6 +32,12 @@ class FormationRestControllerTest {
     @Autowired
     private MockMvc mvc;
     @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;  // <--- AJOUTE CETTE LIGNE
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+
+    @MockBean
     private com.elearning.security.JwtFilter jwtFilter;
 
     @MockBean
@@ -42,6 +48,7 @@ class FormationRestControllerTest {
 
     @MockBean
     private FormationMapperImpl mapper;
+
 
     @Test
     @DisplayName("GET /api/formations renvoie une page de DTO")

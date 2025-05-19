@@ -4,11 +4,17 @@ package com.elearning.rest;
 import com.elearning.dto.RapportEtuDto;
 import com.elearning.exception.ResourceNotFoundException;
 import com.elearning.mapper.RapportEtuMapper;
+import com.elearning.model.User;
+import com.elearning.repository.RapportEtuRepository;  // AJOUTE
+import com.elearning.repository.UserRepository;        // AJOUTE
 import com.elearning.service.RapportEtuService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/rapports")
@@ -16,17 +22,22 @@ public class RapportEtuRestController {
 
     private final RapportEtuService service;
     private final RapportEtuMapper mapper;
+    private final UserRepository userRepository;                  // AJOUTE
+    private final RapportEtuRepository rapportEtuRepository;      // AJOUTE
 
-    public RapportEtuRestController(RapportEtuService service,
-                                    RapportEtuMapper mapper) {
+    // Mets à jour le constructeur :
+    public RapportEtuRestController(
+            RapportEtuService service,
+            RapportEtuMapper mapper,
+            UserRepository userRepository,
+            RapportEtuRepository rapportEtuRepository
+    ) {
         this.service = service;
         this.mapper  = mapper;
+        this.userRepository = userRepository;
+        this.rapportEtuRepository = rapportEtuRepository;
     }
 
-    /**
-     * Récupère une page de rapports étudiants.
-     * GET /api/rapports?page=0&size=10
-     */
     @GetMapping
     public ResponseEntity<Page<RapportEtuDto>> list(Pageable pageable) {
         Page<RapportEtuDto> page = service.findAll(pageable)
@@ -34,11 +45,6 @@ public class RapportEtuRestController {
         return ResponseEntity.ok(page);
     }
 
-    /**
-     * Récupère un rapport par son ID.
-     * GET /api/rapports/{id}
-     * Renvoie 404 si introuvable.
-     */
     @GetMapping("/{id}")
     public ResponseEntity<RapportEtuDto> getOne(@PathVariable Long id) {
         RapportEtuDto dto = service.findById(id)
@@ -50,4 +56,15 @@ public class RapportEtuRestController {
                 );
         return ResponseEntity.ok(dto);
     }
+
+    // 🚩 Nouvel endpoint sécurisé : rapports de l’étudiant connecté
+    @GetMapping("/me")
+    public List<RapportEtuDto> getMesRapports(Authentication auth) {
+        String email = auth.getName();
+        User etudiant = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        return rapportEtuRepository.findByEtudiant(etudiant)
+                .stream().map(mapper::toDto).toList();
+    }
+
 }

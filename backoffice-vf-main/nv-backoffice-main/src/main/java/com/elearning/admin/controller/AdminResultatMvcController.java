@@ -115,4 +115,6 @@ public class AdminResultatMvcController {
         resultatService.delete(id);
         return "redirect:/admin/resultats";
     }
+
+
 }

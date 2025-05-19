@@ -1,4 +1,3 @@
-// src/test/java/com/elearning/web/UserControllerStandaloneTest.java
 package com.elearning.web;
 
 import com.elearning.dto.UserDto;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +23,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 
-
-@AutoConfigureMockMvc(addFilters = false)  // DÉSACTIVE LA SÉCURITÉ SPRING
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(UserRestController.class)
 class UserControllerStandaloneTest {
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
 
     @Autowired
     private MockMvc mvc;
@@ -43,6 +45,7 @@ class UserControllerStandaloneTest {
 
     @MockBean
     private UserMapper mapper;
+
 
     @Test
     void listReturnsPage() throws Exception {

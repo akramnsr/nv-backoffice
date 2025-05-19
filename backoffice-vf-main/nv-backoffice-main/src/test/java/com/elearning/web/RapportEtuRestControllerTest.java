@@ -31,14 +31,18 @@ class RapportEtuRestControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private com.elearning.security.JwtFilter jwtFilter;
+    private com.elearning.repository.UserRepository userRepository;
+    @MockBean
+    private com.elearning.repository.RapportEtuRepository rapportEtuRepository; // AJOUT ICI 👈
 
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
+    @MockBean
+    private com.elearning.security.JwtFilter jwtFilter;
     @MockBean
     private com.elearning.security.JwtUtil jwtUtil;
-
     @MockBean
     private RapportEtuService service;
-
     @MockBean
     private RapportEtuMapper mapper;
 

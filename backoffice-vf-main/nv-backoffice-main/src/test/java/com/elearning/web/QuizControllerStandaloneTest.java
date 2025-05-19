@@ -1,7 +1,7 @@
-// src/test/java/com/elearning/web/QuizControllerStandaloneTest.java
 package com.elearning.web;
 
 import com.elearning.dto.QuizDto;
+import com.elearning.mapper.QuizFullMapper;
 import com.elearning.mapper.QuizMapper;
 import com.elearning.model.Quiz;
 import com.elearning.rest.QuizRestController;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,17 +23,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 
-@AutoConfigureMockMvc(addFilters = false)   // on désactive Spring Security ici
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = QuizRestController.class)
 class QuizControllerStandaloneTest {
+    @MockBean
+    private com.elearning.repository.UserRepository userRepository;
+
+    @MockBean
+    private com.elearning.repository.FormationRepository formationRepository;
+
+    @MockBean
+    private QuizFullMapper quizFullMapper;
 
     @Autowired
     private MockMvc mvc;
-    @MockBean
-    private com.elearning.security.JwtFilter jwtFilter;
-
-    @MockBean
-    private com.elearning.security.JwtUtil jwtUtil;
 
     @MockBean
     private QuizService service;
@@ -42,18 +44,23 @@ class QuizControllerStandaloneTest {
     @MockBean
     private QuizMapper mapper;
 
+
+    @MockBean
+    private com.elearning.security.JwtFilter jwtFilter;
+    @MockBean
+    private com.elearning.security.JwtUtil jwtUtil;
+    @MockBean
+    private com.elearning.security.JpaUserDetailsService userDetailsService;
+
     @Test
     void listReturnsPage() throws Exception {
-        // 1) Préparer un DTO
         QuizDto dto = new QuizDto(42L, "Mon super quiz", "Une description");
 
-        // 2) Mocker service.findAll(Pageable) + mapper.toDto(...)
         given(service.findAll(any(Pageable.class)))
                 .willReturn(new PageImpl<>(List.of(new Quiz())));
         given(mapper.toDto(any(Quiz.class)))
                 .willReturn(dto);
 
-        // 3) Appel GET et assertions JSON
         mvc.perform(get("/api/quizzes")
                         .param("page", "0")
                         .param("size", "10"))
