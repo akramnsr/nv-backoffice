@@ -74,6 +74,28 @@
                      alt="Aperçu de la formation"/>
             </div>
         </div>
+        <div class="mb-3">
+            <label for="videoFiles" class="form-label">Vidéos de la formation :</label>
+            <input id="videoFiles"
+                   type="file"
+                   name="videoFiles"
+                   multiple
+                   accept="video/*"
+                   class="form-control"/>
+            <small class="form-text text-muted">
+                Vous pouvez sélectionner plusieurs vidéos en maintenant Ctrl (ou Cmd) lors de la sélection.
+            </small>
+            <div th:if="${formationDto.videoUrls}">
+                <p>Vidéos existantes :</p>
+                <ul>
+                    <li th:each="url : ${formationDto.videoUrls}">
+                        <a th:href="@{${url}}" th:text="${#strings.substringAfterLast(url, '/')}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
 
         <button type="submit"
                 class="btn btn-primary"

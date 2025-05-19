@@ -71,6 +71,21 @@
         </tr>
         </tbody>
     </table>
+
+    <!-- VIDEOS ASSOCIÉES, À PART EN DESSOUS -->
+    <h3>Vidéos associées</h3>
+    <ul class="list-group">
+        <li class="list-group-item"
+            th:each="vid : ${formation.videos}">
+            <a th:href="@{${vid.url}}"
+               th:text="${vid.filename}"
+               target="_blank"></a>
+        </li>
+        <li class="list-group-item text-center"
+            th:if="${#lists.isEmpty(formation.videos)}">
+            Aucune vidéo associée
+        </li>
+    </ul>
 </div>
 
 </body>

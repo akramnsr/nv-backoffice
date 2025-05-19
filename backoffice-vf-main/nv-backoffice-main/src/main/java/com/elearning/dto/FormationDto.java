@@ -3,6 +3,10 @@ package com.elearning.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormationDto {
 
@@ -17,6 +21,10 @@ public class FormationDto {
     @NotNull @Min(0)
     private int dureeHeures;
 
+    private List<MultipartFile> videoFiles;
+
+    private List<String> videoUrls;
+    private List<VideoDto> videos = new ArrayList<>();
 
 
     /** Contiendra le nom du fichier image (ex. "photo.png") */
@@ -51,4 +59,13 @@ public class FormationDto {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public List<MultipartFile> getVideoFiles() { return videoFiles; }
+    public void setVideoFiles(List<MultipartFile> videoFiles) { this.videoFiles = videoFiles; }
+
+    public List<String> getVideoUrls() { return videoUrls; }
+    public void setVideoUrls(List<String> videoUrls) { this.videoUrls = videoUrls; }
+    public List<VideoDto> getVideos() { return videos; }
+    public void setVideos(List<VideoDto> videos) { this.videos = videos; }
+
 }

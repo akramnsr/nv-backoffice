@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/formations")
 @SessionAttributes("formationDto")
@@ -66,6 +68,8 @@ public class AdminFormationMvcController {
             @ModelAttribute("formationDto") @Valid FormationDto dto,
             BindingResult br,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+            @RequestParam(value = "videoFiles", required = false) List<MultipartFile> videoFiles,
+
             SessionStatus status
     ) {
         if (br.hasErrors()) {
@@ -74,6 +78,10 @@ public class AdminFormationMvcController {
         if (imageFile != null && !imageFile.isEmpty()) {
             dto.setImageUrl(storageService.store(imageFile));
         }
+        if (videoFiles != null && !videoFiles.isEmpty()) {
+            dto.setVideoFiles(videoFiles);
+        }
+
         formationService.save(formationMapper.toEntity(dto));
         status.setComplete();
         // grâce au tri DESC, la nouvelle formation apparaît en tête
@@ -89,7 +97,6 @@ public class AdminFormationMvcController {
         return "admin/formation-form";
     }
 
-    /** 5. Traitement de l’édition */
     @PostMapping("/{id}/modifier")
     public String processEdit(
             @PathVariable Long id,
@@ -104,9 +111,21 @@ public class AdminFormationMvcController {
         if (imageFile != null && !imageFile.isEmpty()) {
             dto.setImageUrl(storageService.store(imageFile));
         }
-        formationService.save(formationMapper.toEntity(dto));
+
+        // ——— Logique pour conserver les vidéos existantes si aucun nouveau fichier vidéo n’est uploadé ———
+        Formation existing = formationService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Formation introuvable"));
+        Formation f = formationMapper.toEntity(dto);
+
+        // Ajoute les vidéos existantes si aucun nouveau fichier vidéo n’a été uploadé
+        if (dto.getVideoFiles() == null || dto.getVideoFiles().isEmpty()) {
+            f.setVideos(existing.getVideos());
+        }
+
+        formationService.save(f);
         return "redirect:/admin/formations";
     }
+
 
     /** 6. Suppression */
     @PostMapping("/{id}/supprimer")

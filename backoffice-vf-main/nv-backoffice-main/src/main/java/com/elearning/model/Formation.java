@@ -20,6 +20,10 @@ public class Formation {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Video> videos = new ArrayList<>();
+
+
     @OneToMany(
             mappedBy = "formation",
             cascade = CascadeType.ALL,
@@ -27,6 +31,8 @@ public class Formation {
             fetch = FetchType.EAGER   // charge les quizzes pour getNombreQuiz()
     )
     private List<Quiz> quizzes = new ArrayList<>();
+
+
 
     public Formation() { }
 
@@ -55,7 +61,8 @@ public class Formation {
 
     public List<Quiz> getQuizzes() { return quizzes; }
     public void setQuizzes(List<Quiz> quizzes) { this.quizzes = quizzes; }
-
+    public List<Video> getVideos() { return videos; }
+    public void setVideos(List<Video> videos) { this.videos = videos; }
     /**
      * Calculé à la volée, non persistant
      */
@@ -63,4 +70,5 @@ public class Formation {
     public int getNombreQuiz() {
         return quizzes.size();
     }
-}
+
+    }
